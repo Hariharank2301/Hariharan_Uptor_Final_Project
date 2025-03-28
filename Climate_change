@@ -1,0 +1,108 @@
+                       Project Predict weather_condition
+
+
+ I will create a Python program using PyCharm to apply Supervised Learning (Regression or Classification) and Unsupervised Learning (Clustering or Dimensionality Reduction) of my rainfall dataset.
+
+Steps:
+
+Load the dataset and preprocess it (handling missing values, encoding categorical features if needed).
+
+Supervised Learning:
+
+If there is a target variable, apply Regression (e.g., Linear Regression, Decision Trees) or Classification (e.g., Random Forest, SVM).
+
+Unsupervised Learning:
+
+Apply Clustering (K-Means, Hierarchical Clustering) or Dimensionality Reduction (PCA, t-SNE).
+Model Evaluation and visualization.
+I'll first inspect your dataset to determine the structure. Let me check its contents.
+
+Dataset Insights:
+
+Columns:
+
+date (object) – Date of observation.
+rainfall (float) – Amount of rainfall (mm).
+temperature (float) – Temperature (°C).
+humidity (float) – Humidity (%).
+wind_speed (float) – Wind speed (km/h).
+weather_condition (object) – Categorical (Rainy, Sunny, etc.).
+Missing Values: Some rows have missing values in rainfall, temperature, humidity, wind_speed, and weather_condition.
+
+Plan:
+
+Supervised Learning:
+Predict weather_condition (classification) OR rainfall (regression).
+
+
+Unsupervised Learning:
+Cluster weather patterns using K-Means.
+
+I'll now write the PyCharm-compatible program to implement this.
+
+Supervised Unsupervised
+
+This program:
+Loads and cleans the dataset (handling missing values).
+Encodes categorical variables (weather conditions).
+Uses a Random Forest Classifier to predict the weather condition.
+Applies K-Means Clustering to find patterns in weather data.
+Visualizes clustering results
+
+
+
+Program:
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.cluster import KMeans
+from sklearn.metrics import accuracy_score, classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load dataset
+df = pd.read_csv("rainfall.csv")
+
+# Drop rows with missing values
+df.dropna(inplace=True)
+
+# Encode categorical target variable
+le = LabelEncoder()
+df['weather_condition'] = le.fit_transform(df['weather_condition'])
+
+# Features and target
+X = df[['temperature', 'humidity', 'wind_speed']]
+y = df['weather_condition']
+
+# Standardize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+# Supervised Learning: Classification
+
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+print("Classification Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+
+# Unsupervised Learning: K-Means Clustering
+
+kmeans = KMeans(n_clusters=2, random_state=42)
+df['cluster'] = kmeans.fit_predict(X_scaled)
+
+# Visualization
+
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x=df['temperature'], y=df['humidity'], hue=df['cluster'], palette='viridis')
+plt.title("K-Means Clustering of Weather Data")
+plt.show()
+
+
+
